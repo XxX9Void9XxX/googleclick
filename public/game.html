@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Clicker Game</title>
+</head>
+<body>
+  <h1>Clicker Game</h1>
+  <button id="clickBtn">CLICK</button>
+  <p>Clicks: <span id="score">0</span></p>
+
+  <script>
+    async function loadUser() {
+      const res = await fetch("/me");
+      if (!res.ok) {
+        window.location.href = "/";
+        return;
+      }
+      const user = await res.json();
+      document.getElementById("score").textContent = user.clicks;
+    }
+
+    document.getElementById("clickBtn").onclick = async () => {
+      const res = await fetch("/click", { method: "POST" });
+      const data = await res.json();
+      document.getElementById("score").textContent = data.clicks;
+    };
+
+    loadUser();
+  </script>
+</body>
+</html>
